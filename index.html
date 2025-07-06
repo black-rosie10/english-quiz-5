@@ -1,0 +1,542 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>English Quiz - Questions 41-50</title>
+    <link href="https://fonts.googleapis.com/css2?family=Snow+Buddy&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .quiz-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            max-width: 800px;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .quiz-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .quiz-title {
+            font-family: 'Snow Buddy', cursive;
+            font-size: 2.5rem;
+            color: #4b0082;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            transition: width 0.3s ease;
+        }
+
+        .question-counter {
+            font-size: 1.1rem;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .question-box {
+            margin-bottom: 30px;
+        }
+
+        .question-text {
+            font-size: 1.3rem;
+            color: #2c3e50;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
+        .options {
+            display: grid;
+            gap: 15px;
+        }
+
+        .option {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            padding: 15px 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.1rem;
+        }
+
+        .option:hover {
+            background: #e3f2fd;
+            border-color: #2196f3;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(33, 150, 243, 0.2);
+        }
+
+        .option.selected {
+            background: #e8f5e8;
+            border-color: #4caf50;
+            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.2);
+        }
+
+        .option.correct {
+            background: #d4edda;
+            border-color: #28a745;
+            color: #155724;
+        }
+
+        .option.incorrect {
+            background: #f8d7da;
+            border-color: #dc3545;
+            color: #721c24;
+        }
+
+        .option input[type="radio"] {
+            display: none;
+        }
+
+        .option-marker {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #fff;
+            border: 2px solid #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #666;
+            flex-shrink: 0;
+        }
+
+        .option.selected .option-marker {
+            background: #4caf50;
+            border-color: #4caf50;
+            color: white;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+        }
+
+        .btn-next {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-next:hover {
+            background: #218838;
+            transform: translateY(-2px);
+        }
+
+        .hint-box {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .hint-box.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hint-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #856404;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .hint-text {
+            color: #856404;
+            line-height: 1.5;
+        }
+
+        .final-score {
+            text-align: center;
+            padding: 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 20px;
+            color: white;
+            margin-top: 30px;
+        }
+
+        .score-number {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+
+        .nav-info {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .quiz-container {
+                padding: 30px 20px;
+            }
+            
+            .quiz-title {
+                font-size: 2rem;
+            }
+            
+            .question-text {
+                font-size: 1.1rem;
+            }
+            
+            .option {
+                padding: 12px 15px;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <div class="header">
+            <h1 class="quiz-title">English Quiz</h1>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressBar"></div>
+            </div>
+            <div class="question-counter" id="questionCounter">Question 41 of 50</div>
+        </div>
+
+        <div class="question-box" id="questionBox">
+            <!-- Questions will be loaded here -->
+        </div>
+
+        <div class="hint-box" id="hintBox">
+            <div class="hint-title">
+                💡 Hint
+            </div>
+            <div class="hint-text" id="hintText"></div>
+        </div>
+
+        <div class="buttons">
+            <button class="btn btn-primary" id="checkBtn">Check Answer</button>
+            <button class="btn btn-next" id="nextBtn" style="display: none;">Next Question</button>
+        </div>
+
+        <div class="navigation">
+            <div class="nav-info">
+                <span id="currentPage">Page 1 of 10</span>
+            </div>
+            <div class="nav-info">
+                Score: <span id="currentScore">0</span>/10
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Quiz data with hints for questions 41-50
+        const questions = [
+            {
+                q: "41. What is the denotation of the word 'snake'?",
+                options: ["A symbol of evil and deception", "A cold blooded reptile", "A sneaky or untrustworthy person", "A bringer of bad luck"],
+                correct: 1,
+                hint: "Denotation refers to the literal, dictionary meaning of a word, not its symbolic or figurative meanings."
+            },
+            {
+                q: "42. Which of the following is a correct example of a first conditional sentence?",
+                options: ["If I studied, I would pass the exam.", "If she eats too much, she will feel sick.", "If I were you, I would take the job.", "If he had left earlier, he would have caught the bus."],
+                correct: 1,
+                hint: "First conditional uses 'if + present simple' + 'will + base verb' to express real future possibilities."
+            },
+            {
+                q: "43. The eloquence made his speech effective. The underlined word means:",
+                options: ["Weak", "Strong", "Fluency", "Healthy"],
+                correct: 2,
+                hint: "Eloquence refers to the ability to speak or write fluently and persuasively."
+            },
+            {
+                q: "44. _____ he chose to spend her vacation is not known to anyone.",
+                options: ["Which", "When", "What", "Where"],
+                correct: 3,
+                hint: "The sentence is asking about a place or location. Think about which question word asks about place."
+            },
+            {
+                q: "45. Which conditional sentence expresses an unreal past situation?",
+                options: ["If you heat ice, it melts.", "If I were a bird, I would fly.", "If he had studied, he would have passed.", "If it rains, we will stay inside."],
+                correct: 2,
+                hint: "Third conditional uses 'if + past perfect' + 'would have + past participle' to express unreal past situations."
+            },
+            {
+                q: "46. He ran so fast ____________",
+                options: ["How he won the race", "Why he won the race", "What he won the race", "That he won the race"],
+                correct: 3,
+                hint: "This is a 'so...that' construction showing result or consequence. The structure is 'so + adjective/adverb + that + clause'."
+            },
+            {
+                q: "47. Identify the main clause in: Ramesh danced when night came.",
+                options: ["Ramesh danced", "When night came", "Night came", "Danced when night came"],
+                correct: 0,
+                hint: "The main clause is the independent clause that can stand alone as a complete sentence."
+            },
+            {
+                q: "48. Their house is not so good as ours. Identify the pronoun type.",
+                options: ["Demonstrative pronoun", "Relative pronoun", "Possessive pronoun", "Intensive pronoun"],
+                correct: 2,
+                hint: "Look at the word 'ours' - it shows ownership or possession without being followed by a noun."
+            },
+            {
+                q: "49. Plural form of cactus is:",
+                options: ["Cactuses", "Cactes", "Cacti", "Cacties"],
+                correct: 2,
+                hint: "Many Latin-origin words ending in '-us' form their plural by changing '-us' to '-i'."
+            },
+            {
+                q: "50. People who work hard succeed. The underlined part is:",
+                options: ["Noun clause", "Adjective clause", "Adverb clause", "Prepositional clause"],
+                correct: 1,
+                hint: "This clause modifies the noun 'people' and answers the question 'which people?' - it describes or gives more information about the noun."
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+        let selectedAnswer = null;
+        let hasAnswered = false;
+
+        function updateProgress() {
+            const progress = ((currentQuestion + 1) / questions.length) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+            document.getElementById('questionCounter').textContent = `Question ${41 + currentQuestion} of 50`;
+            document.getElementById('currentPage').textContent = `Page ${currentQuestion + 1} of ${questions.length}`;
+            document.getElementById('currentScore').textContent = score;
+        }
+
+        function loadQuestion() {
+            if (currentQuestion >= questions.length) {
+                showFinalScore();
+                return;
+            }
+
+            const question = questions[currentQuestion];
+            const questionBox = document.getElementById('questionBox');
+            
+            questionBox.innerHTML = `
+                <div class="question-text">${question.q}</div>
+                <div class="options">
+                    ${question.options.map((option, index) => `
+                        <div class="option" onclick="selectAnswer(${index})">
+                            <div class="option-marker">${String.fromCharCode(65 + index)}</div>
+                            <span>${option}</span>
+                            <input type="radio" name="answer" value="${index}">
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+
+            // Reset UI state
+            document.getElementById('checkBtn').style.display = 'inline-block';
+            document.getElementById('nextBtn').style.display = 'none';
+            document.getElementById('hintBox').classList.remove('show');
+            selectedAnswer = null;
+            hasAnswered = false;
+            
+            updateProgress();
+        }
+
+        function selectAnswer(index) {
+            if (hasAnswered) return;
+            
+            selectedAnswer = index;
+            
+            // Remove previous selections
+            document.querySelectorAll('.option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            
+            // Add selection to clicked option
+            document.querySelectorAll('.option')[index].classList.add('selected');
+        }
+
+        function checkAnswer() {
+            if (selectedAnswer === null) {
+                alert('Please select an answer first!');
+                return;
+            }
+
+            if (hasAnswered) return;
+            
+            hasAnswered = true;
+            const question = questions[currentQuestion];
+            const options = document.querySelectorAll('.option');
+            
+            // Show correct answer
+            options[question.correct].classList.add('correct');
+            
+            if (selectedAnswer === question.correct) {
+                score++;
+                alert('Correct! Well done! 🎉');
+            } else {
+                options[selectedAnswer].classList.add('incorrect');
+                showHint(question.hint);
+            }
+            
+            // Update UI
+            document.getElementById('checkBtn').style.display = 'none';
+            document.getElementById('nextBtn').style.display = 'inline-block';
+            document.getElementById('currentScore').textContent = score;
+            
+            // Disable all options
+            options.forEach(option => {
+                option.style.pointerEvents = 'none';
+            });
+        }
+
+        function showHint(hintText) {
+            const hintBox = document.getElementById('hintBox');
+            const hintTextElement = document.getElementById('hintText');
+            
+            hintTextElement.textContent = hintText;
+            hintBox.classList.add('show');
+        }
+
+        function nextQuestion() {
+            currentQuestion++;
+            loadQuestion();
+        }
+
+        function showFinalScore() {
+            const percentage = Math.round((score / questions.length) * 100);
+            let message = '';
+            
+            if (percentage >= 90) {
+                message = 'Outstanding! You\'re an English expert! 🌟';
+            } else if (percentage >= 70) {
+                message = 'Great job! You have a solid understanding! 👏';
+            } else if (percentage >= 50) {
+                message = 'Good effort! Keep practicing! 💪';
+            } else {
+                message = 'Keep learning! You\'ll improve with practice! 📚';
+            }
+            
+            document.getElementById('questionBox').innerHTML = `
+                <div class="final-score">
+                    <div class="score-number">${score}/${questions.length}</div>
+                    <div style="font-size: 1.5rem; margin-bottom: 10px;">${percentage}%</div>
+                    <div style="font-size: 1.2rem;">${message}</div>
+                    <button class="btn btn-primary" onclick="restartQuiz()" style="margin-top: 20px;">
+                        Start Over
+                    </button>
+                </div>
+            `;
+            
+            document.getElementById('checkBtn').style.display = 'none';
+            document.getElementById('nextBtn').style.display = 'none';
+            document.getElementById('hintBox').classList.remove('show');
+        }
+
+        function restartQuiz() {
+            currentQuestion = 0;
+            score = 0;
+            selectedAnswer = null;
+            hasAnswered = false;
+            loadQuestion();
+        }
+
+        // Event listeners
+        document.getElementById('checkBtn').addEventListener('click', checkAnswer);
+        document.getElementById('nextBtn').addEventListener('click', nextQuestion);
+
+        // Initialize quiz
+        loadQuestion();
+    </script>
+</body>
+</html>
